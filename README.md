@@ -5,9 +5,9 @@
 
 This library allows you to write pretty [NancyFX][2] routes without nasty looking regex strings in your routes.
 
-    public class HomeModule : BaseModule
+    public class HomeModule : NancyModule
     {
-        public DinnerModule()
+        public HomeModule()
         {
             Get[RouteParameters.AnyInt()] = parameters =>
             {
