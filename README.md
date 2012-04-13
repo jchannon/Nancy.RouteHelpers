@@ -4,3 +4,5 @@
 **Welcome to Nancy.RouteHelpers!**
 
 This library allows you to write pretty [NancyFX][2] routes without nasty looking regex strings in your routes
+
+[2]: http://nancyfx.org/
