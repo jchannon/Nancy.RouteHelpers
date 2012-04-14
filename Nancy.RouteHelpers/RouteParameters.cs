@@ -13,6 +13,16 @@ namespace Nancy.RouteHelpers
 			return @"/(?<id>[\d]{" + lengthStart + "," + lengthEnd + "})";
 		}
 
+        public static string And()
+        {
+            return Root();
+        }
+
+        public static string Root()
+        {
+            return "/";
+        }
+
 		//string, string length, certain string, certain number
 	}
 }
