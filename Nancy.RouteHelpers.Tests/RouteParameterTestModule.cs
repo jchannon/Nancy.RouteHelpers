@@ -2,18 +2,22 @@ namespace Nancy.RouteHelpers.Tests
 {
 	public class RouteParameterTestModule : NancyModule
 	{
-		public RouteParameterTestModule()
+		public RouteParameterTestModule() 
 		{
-			Get[RouteParameters.AnyInt(1, 4)] = parameters =>
-			                                    	{
-			                                    		return "IntOfLength1To4";
-			                                    	};
+            Get[new RouteParameters().Root().AnyIntAtLeastOnce("id", 1, 4)] = parameters =>
+                                                    {
+                                                        return "IntOfLength1To4";
+                                                    };
 
-			Get[RouteParameters.AnyInt()] = parameters =>
-			                                	{
+            Get[new RouteParameters().Root().AnyIntAtLeastOnce("id")] = parameters =>
+                                                {
+                                                    return "AnyInt";
+                                                };
 
-			                                		return "AnyInt";
-			                                	};
+            Get[new RouteParameters().Root().AnyIntOptional("id")] = parameters =>
+                {
+                    return "OptionalInt";
+                };
 		}
 	}
 }
