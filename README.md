@@ -9,7 +9,7 @@ This library allows you to write pretty [NancyFX][2] routes without nasty lookin
     {
         public HomeModule()
         {
-            Get[RouteParameters.AnyInt()] = parameters =>
+            Get[Route.AnyInt()] = parameters =>
             {
                 return View["Index"];
             };
