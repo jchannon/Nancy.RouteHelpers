@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace Nancy.RouteHelpers.Tests
 {
     public class RouteParameterWithBasePathModule : NancyModule
@@ -11,7 +7,7 @@ namespace Nancy.RouteHelpers.Tests
         {
             Get[Route.AnyIntOptional("id")] = parameters =>
             {
-                return "OptionalInt";
+                return "/dinners/OptionalInt";
             };
         }
     }

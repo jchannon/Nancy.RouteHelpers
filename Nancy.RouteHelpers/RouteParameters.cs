@@ -60,10 +60,8 @@ namespace Nancy.RouteHelpers
         /// <returns></returns>
         public RouteParameters AnyIntOptional(string NamedGroup)
         {
-            //(?:/(?<id>[\d]*))?
-
-            //RouteBuilder.Append(@"(?<" + NamedGroup + @">[\d]*)");
-            RouteBuilder.Append(@"(?:/(?<" + NamedGroup + @">[\d]*))?");
+            RouteBuilder.Append(@"/?(?<" + NamedGroup + @">[\d]*)");
+            
             return this;
         }
 

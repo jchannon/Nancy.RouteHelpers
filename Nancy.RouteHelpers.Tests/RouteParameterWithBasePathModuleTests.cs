@@ -17,7 +17,7 @@ namespace Nancy.RouteHelpers.Tests
             INancyBootstrapper bootstrapper = SetupBootStrapper();
             var browser = new Browser(bootstrapper);
 
-            Assert.AreEqual("OptionalInt", browser.Get("/dinners").Body.AsString());
+            Assert.AreEqual("/dinners/OptionalInt", browser.Get("/dinners").Body.AsString());
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace Nancy.RouteHelpers.Tests
             INancyBootstrapper bootstrapper = SetupBootStrapper();
             var browser = new Browser(bootstrapper);
 
-            Assert.AreEqual("OptionalInt", browser.Get("/dinners/").Body.AsString());
+            Assert.AreEqual("/dinners/OptionalInt", browser.Get("/dinners/").Body.AsString());
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace Nancy.RouteHelpers.Tests
             INancyBootstrapper bootstrapper = SetupBootStrapper();
             var browser = new Browser(bootstrapper);
 
-            Assert.AreEqual("OptionalInt", browser.Get("/dinners/23").Body.AsString());
+            Assert.AreEqual("/dinners/OptionalInt", browser.Get("/dinners/23").Body.AsString());
         } 
     }
 }

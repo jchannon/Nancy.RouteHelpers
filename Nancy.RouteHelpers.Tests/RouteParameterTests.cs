@@ -7,7 +7,7 @@ namespace Nancy.RouteHelpers.Tests
 {
 	public class RouteParameterTests
 	{
-        private DefaultNancyBootstrapper SetupBootStrapper()
+        private static DefaultNancyBootstrapper SetupBootStrapper()
         {
             return new DefaultNancyBootstrapper();
         }
@@ -30,13 +30,36 @@ namespace Nancy.RouteHelpers.Tests
             Assert.AreEqual("IntOfLength1To4", browser.Get("/123").Body.AsString());
 		}
 
-        [Test]
-        public void Url_WithWithoutInt_Accepted()
+        public class OptionalIntTests
         {
-            INancyBootstrapper bootstrapper = SetupBootStrapper();
-            var browser = new Browser(bootstrapper);
+            [Test]
+            public void Slash_should_match_optional_int()
+            {
+                INancyBootstrapper bootstrapper = SetupBootStrapper();
+                var browser = new Browser(bootstrapper);
 
-            Assert.AreEqual("OptionalInt", browser.Get("/").Body.AsString());
+                Assert.AreEqual("OptionalInt", browser.Get("/").Body.AsString());
+            }
+
+            [Test]
+            public void Empty_should_match_optional_int()
+            {
+                INancyBootstrapper bootstrapper = SetupBootStrapper();
+                var browser = new Browser(bootstrapper);
+
+                Assert.AreEqual("OptionalInt", browser.Get("").Body.AsString());
+            }
+
+            [Test]
+            public void Ints_should_match_optional_int()
+            {
+                INancyBootstrapper bootstrapper = SetupBootStrapper();
+                var browser = new Browser(bootstrapper);
+
+                Assert.AreEqual("OptionalInt", browser.Get("/1234").Body.AsString());
+            }
+    
         }
+        
 	}
 }
