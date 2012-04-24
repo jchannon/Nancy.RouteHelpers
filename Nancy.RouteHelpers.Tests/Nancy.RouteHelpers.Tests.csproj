@@ -62,9 +62,12 @@
     <Compile Include="RouteParameterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteParameterWithBasePathModule.cs" />
+    <Compile Include="RouteParameterWithBasePathModuleTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Nancy.RouteHelpers\Nancy.RouteHelpers.csproj">

@@ -38,14 +38,5 @@ namespace Nancy.RouteHelpers.Tests
 
             Assert.AreEqual("OptionalInt", browser.Get("/").Body.AsString());
         }
-
-        [Test]
-        public void BaseUrl_WithWithoutInt_Accepted()
-        {
-            INancyBootstrapper bootstrapper = SetupBootStrapper();
-            var browser = new Browser(bootstrapper);
-
-            Assert.AreEqual("OptionalInt", browser.Get("/dinners/23").Body.AsString());
-        }
 	}
 }
