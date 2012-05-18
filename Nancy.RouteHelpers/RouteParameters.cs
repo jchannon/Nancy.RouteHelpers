@@ -61,7 +61,7 @@ namespace Nancy.RouteHelpers
         public RouteParameters AnyIntOptional(string NamedGroup)
         {
             RouteBuilder.Append(@"/?(?<" + NamedGroup + @">[\d]*)");
-            
+
             return this;
         }
 
@@ -85,7 +85,30 @@ namespace Nancy.RouteHelpers
             return this;
         }
 
-        //string, string length, certain string, certain number
+        //certain number
+
+        public RouteParameters AnyStringOptional(string NamedGroup)
+        {
+            RouteBuilder.Append(@"/?(?<" + NamedGroup + @">[\S]*)");
+
+            return this;
+        }
+
+        public RouteParameters AnyStringAtLeastOnce(string NamedGroup, int lengthStart, int lengthEnd)
+        {
+            RouteBuilder.Append(@"(?<" + NamedGroup + @">[\S]{" + lengthStart + "," + lengthEnd + "})");
+
+            return this;
+        }
+
+        public RouteParameters Exact(string NamedGroup, string Exact)
+        {
+            RouteBuilder.Append(@"(?<" + NamedGroup + ">" + Exact + ")");
+
+            return this;
+        }
+
+
     }
 
 

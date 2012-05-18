@@ -4,7 +4,8 @@ using Nancy.Testing;
 using NUnit.Framework;
 using Nancy.Testing.Fakes;
 using System;
-
+using System.Diagnostics;
+using System.Linq;
 
 namespace Nancy.RouteHelpers.Tests
 {
@@ -27,9 +28,9 @@ namespace Nancy.RouteHelpers.Tests
             });
         }
 
-        private BrowserResponse SetupRouteResponse(string Root, string Path, RouteParameters NancyRoute, string ExpectedResponse)
+        private BrowserResponse SetupRouteResponse(string Root, string Path, string NancyRoute, string ExpectedResponse)
         {
-            var module = SetupModule(Root + "/" + NancyRoute, x => ExpectedResponse);
+            var module = SetupModule(Root + NancyRoute, x => ExpectedResponse);
 
             var boostrapper = SetupBoot(module);
 
@@ -44,30 +45,30 @@ namespace Nancy.RouteHelpers.Tests
             return result;
         }
 
-        [TestCase("/", "/1", 1, 3)]
-        [TestCase("/", "/12", 1, 3)]
-        [TestCase("/", "/123", 1, 3)]
-        [TestCase("/", "/1", 1, 1)]
-        [TestCase("/", "/12", 1, 2)]
+        [TestCase("", "/1", 1, 3)]
+        [TestCase("", "/12", 1, 3)]
+        [TestCase("", "/123", 1, 3)]
+        [TestCase("", "/1", 1, 1)]
+        [TestCase("", "/12", 1, 2)]
         public void Browser_GetRequest_AcceptsAnyIntWithLengthRange(string Root, string Path, int LengthStart, int LengthEnd)
         {
             //Arrange & Act
-            var result = SetupRouteResponse(Root, Path, Route.AnyIntAtLeastOnce("id", LengthStart, LengthEnd), "AnyIntLength");
+            var result = SetupRouteResponse(Root, Path, "/" + Route.AnyIntAtLeastOnce("id", LengthStart, LengthEnd), "AnyIntLength");
 
             //Assert
             Assert.AreEqual("AnyIntLength", result.Body.AsString());
 
         }
 
-        [TestCase("/", "/1")]
-        [TestCase("/", "/123456789")]
+        [TestCase("", "/1")]
+        [TestCase("", "/123456789")]
         [TestCase("/dinners", "/dinners/1")]
         [TestCase("/dinners", "/dinners/123")]
         [TestCase("/dinners/edit", "/dinners/edit/123")]
         public void Browser_GetRequest_AcceptsAnyInt(string Root, string Path)
         {
             //Arrange & Act
-            var result = SetupRouteResponse(Root, Path, Route.AnyIntAtLeastOnce("id"), "AnyInt");
+            var result = SetupRouteResponse(Root, Path, "/" + Route.AnyIntAtLeastOnce("id"), "AnyInt");
 
             //Assert
             Assert.AreEqual("AnyInt", result.Body.AsString());
@@ -75,8 +76,8 @@ namespace Nancy.RouteHelpers.Tests
         }
 
 
-        [TestCase("/", "/")]
-        [TestCase("/", "/123")]
+        [TestCase("", "/")]
+        [TestCase("", "/123")]
         [TestCase("/dinners", "/dinners")]
         [TestCase("/dinners", "/dinners/123")]
         [TestCase("/dinners/create", "/dinners/create")]
@@ -90,5 +91,53 @@ namespace Nancy.RouteHelpers.Tests
             //Assert
             Assert.AreEqual("OptionalInt", result.Body.AsString());
         }
+
+        [TestCase("", "/")]
+        [TestCase("", "/abc")]
+        [TestCase("/dinners", "/dinners")]
+        [TestCase("/dinners", "/dinners/abc")]
+        [TestCase("/dinners", "/dinners/!£$%&()_+{}")]
+        public void Browser_GetReqest_AcceptsOptionalString(string Root, string Path)
+        {
+            //Arrange & Act
+            var result = SetupRouteResponse(Root, Path, Route.AnyStringOptional("id"), "OptionalString");
+
+            //Assert
+            Assert.AreEqual("OptionalString", result.Body.AsString());
+
+        }
+
+        [TestCase("", "/a", 1, 1)]
+        [TestCase("", "/a", 1, 2)]
+        [TestCase("", "/ab", 1, 2)]
+        [TestCase("", "/a", 1, 3)]
+        [TestCase("", "/ab", 1, 3)]
+        [TestCase("", "/abc", 1, 3)]
+        public void Browser_GetReqest_AcceptsAnyStringWithLengthRange(string Root, string Path, int LengthStart, int LengthEnd)
+        {
+            //Arrange & Act
+            var result = SetupRouteResponse(Root, Path, "/" + Route.AnyStringAtLeastOnce("id", LengthStart, LengthEnd), "AnyStringWithRange");
+
+            //Assert
+            Assert.AreEqual("AnyStringWithRange", result.Body.AsString());
+
+        }
+
+        [TestCase("", "/abc", "abc")]
+        [TestCase("", "/abcdefghijklmnopqrstuvwxyz", "abcdefghijklmnopqrstuvwxyz")]
+        [TestCase("", "/1", "1")]
+        [TestCase("", "/12", "12")]
+        [TestCase("", "/123", "123")]
+        public void Browser_GetRequest_AcceptsExactPattern(string Root, string Path, string Exact)
+        {
+            //Arrange & Act
+            var result = SetupRouteResponse(Root, Path, "/" + Route.Exact("id", Exact), "Exact");
+
+
+            //Assert
+            Assert.AreEqual("Exact", result.Body.AsString());
+        }
+
+
     }
 }

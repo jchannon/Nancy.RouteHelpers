@@ -31,5 +31,22 @@ namespace Nancy.RouteHelpers
         {
             return new RouteParameters().Root();
         }
+
+        public static RouteParameters AnyStringOptional(string NamedGroup)
+        {
+            return new RouteParameters().AnyStringOptional(NamedGroup);
+        }
+
+        public static RouteParameters AnyStringAtLeastOnce(string NamedGroup, int lengthStart, int lengthEnd)
+        {
+            return new RouteParameters().AnyStringAtLeastOnce(NamedGroup, lengthStart, lengthEnd);
+        }
+
+        public static RouteParameters Exact(string NamedGroup, string Exact)
+        {
+            return new RouteParameters().Exact(NamedGroup, Exact);
+        }
+
+       
     }
 }
