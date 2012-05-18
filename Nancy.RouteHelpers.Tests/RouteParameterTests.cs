@@ -2,64 +2,93 @@
 using Nancy.Bootstrapper;
 using Nancy.Testing;
 using NUnit.Framework;
+using Nancy.Testing.Fakes;
+using System;
+
 
 namespace Nancy.RouteHelpers.Tests
 {
-	public class RouteParameterTests
-	{
-        private static DefaultNancyBootstrapper SetupBootStrapper()
+    public class RouteParameterTests
+    {
+        private FakeNancyModule SetupModule(string Path, Func<dynamic, Response> Response)
         {
-            return new DefaultNancyBootstrapper();
+            return new FakeNancyModule(with =>
+            {
+                with.Get(Path, Response);
+            });
         }
 
-		[Test]
-		public void Url_consisting_of_more_than_four_ints()
-		{
-            INancyBootstrapper bootstrapper = SetupBootStrapper();
-			var browser = new Browser(bootstrapper);
-
-			Assert.AreEqual("AnyInt", browser.Get("/13245").Body.AsString());
-		}
-
-        [Test]
-		public void Url_consiting_of_between_1_and_4_ints()
-		{
-            INancyBootstrapper bootstrapper = SetupBootStrapper();
-			var browser = new Browser(bootstrapper);
-
-            Assert.AreEqual("IntOfLength1To4", browser.Get("/123").Body.AsString());
-		}
-
-        public class OptionalIntTests
+        private ConfigurableBootstrapper SetupBoot(NancyModule module)
         {
-            [Test]
-            public void Slash_should_match_optional_int()
+            return new ConfigurableBootstrapper(with =>
             {
-                INancyBootstrapper bootstrapper = SetupBootStrapper();
-                var browser = new Browser(bootstrapper);
-
-                Assert.AreEqual("OptionalInt", browser.Get("/").Body.AsString());
-            }
-
-            [Test]
-            public void Empty_should_match_optional_int()
-            {
-                INancyBootstrapper bootstrapper = SetupBootStrapper();
-                var browser = new Browser(bootstrapper);
-
-                Assert.AreEqual("OptionalInt", browser.Get("").Body.AsString());
-            }
-
-            [Test]
-            public void Ints_should_match_optional_int()
-            {
-                INancyBootstrapper bootstrapper = SetupBootStrapper();
-                var browser = new Browser(bootstrapper);
-
-                Assert.AreEqual("OptionalInt", browser.Get("/1234").Body.AsString());
-            }
-    
+                with.DisableAutoRegistration();
+                with.Module(module, module.GetType().FullName);
+            });
         }
-        
-	}
+
+        private BrowserResponse SetupRouteResponse(string Root, string Path, RouteParameters NancyRoute, string ExpectedResponse)
+        {
+            var module = SetupModule(Root + "/" + NancyRoute, x => ExpectedResponse);
+
+            var boostrapper = SetupBoot(module);
+
+            var browser = new Browser(boostrapper);
+
+            //Act
+            var result = browser.Get(Path, with =>
+            {
+                with.HttpRequest();
+            });
+
+            return result;
+        }
+
+        [TestCase("/", "/1", 1, 3)]
+        [TestCase("/", "/12", 1, 3)]
+        [TestCase("/", "/123", 1, 3)]
+        [TestCase("/", "/1", 1, 1)]
+        [TestCase("/", "/12", 1, 2)]
+        public void Browser_GetRequest_AcceptsAnyIntWithLengthRange(string Root, string Path, int LengthStart, int LengthEnd)
+        {
+            //Arrange & Act
+            var result = SetupRouteResponse(Root, Path, Route.AnyIntAtLeastOnce("id", LengthStart, LengthEnd), "AnyIntLength");
+
+            //Assert
+            Assert.AreEqual("AnyIntLength", result.Body.AsString());
+
+        }
+
+        [TestCase("/", "/1")]
+        [TestCase("/", "/123456789")]
+        [TestCase("/dinners", "/dinners/1")]
+        [TestCase("/dinners", "/dinners/123")]
+        [TestCase("/dinners/edit", "/dinners/edit/123")]
+        public void Browser_GetRequest_AcceptsAnyInt(string Root, string Path)
+        {
+            //Arrange & Act
+            var result = SetupRouteResponse(Root, Path, Route.AnyIntAtLeastOnce("id"), "AnyInt");
+
+            //Assert
+            Assert.AreEqual("AnyInt", result.Body.AsString());
+
+        }
+
+
+        [TestCase("/", "/")]
+        [TestCase("/", "/123")]
+        [TestCase("/dinners", "/dinners")]
+        [TestCase("/dinners", "/dinners/123")]
+        [TestCase("/dinners/create", "/dinners/create")]
+        [TestCase("/dinners/edit", "/dinners/edit/123")]
+        public void Browser_GetRequest_AcceptsOptionalInt(string Root, string Path)
+        {
+
+            //Arrange & Act
+            var result = SetupRouteResponse(Root, Path, Route.AnyIntOptional("id"), "OptionalInt");
+
+            //Assert
+            Assert.AreEqual("OptionalInt", result.Body.AsString());
+        }
+    }
 }

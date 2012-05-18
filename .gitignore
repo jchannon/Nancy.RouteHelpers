@@ -1,4 +1,4 @@
-*.[Cc]ache
+﻿*.[Cc]ache
 *.csproj.user
 *.[Rr]e[Ss]harper*
 *.sln.cache
@@ -19,4 +19,4 @@ _[Rr]e[Ss]harper.*/
 *.tss
 *.ncrunchproject
 *.ncrunchsolution
-packages/N*
+packages/
