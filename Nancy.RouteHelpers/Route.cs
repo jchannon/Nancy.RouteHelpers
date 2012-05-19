@@ -25,7 +25,7 @@
         }
 
         /// <summary>
-        /// Creates a route that will accept an int but the URL doesn't always have to contain one, for example, /products OR /products/123
+        /// Creates a route that will accept an int but the URL doesn't always have to contain one, for example, /products OR /products/123. NOTE: Do not use a / in your route before using this method as one is included
         /// </summary>
         /// <param name="NamedGroup">The name of the parameter in the route</param>
         /// <returns></returns>
@@ -53,7 +53,7 @@
         }
 
         /// <summary>
-        /// Creates a route that will accept a string but the URL doesn't always have to contain one, for example, /products OR /products/mac
+        /// Creates a route that will accept a string but the URL doesn't always have to contain one, for example, /products OR /products/mac. NOTE: Do not use a / in your route before using this method as one is included
         /// </summary>
         /// <param name="NamedGroup">The name of the parameter in the route</param>
         /// <returns></returns>
