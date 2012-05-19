@@ -1,11 +1,7 @@
-﻿
-using Nancy.Bootstrapper;
-using Nancy.Testing;
+﻿using Nancy.Testing;
 using NUnit.Framework;
 using Nancy.Testing.Fakes;
 using System;
-using System.Diagnostics;
-using System.Linq;
 
 namespace Nancy.RouteHelpers.Tests
 {
@@ -36,7 +32,6 @@ namespace Nancy.RouteHelpers.Tests
 
             var browser = new Browser(boostrapper);
 
-            //Act
             var result = browser.Get(Path, with =>
             {
                 with.HttpRequest();
@@ -84,7 +79,6 @@ namespace Nancy.RouteHelpers.Tests
         [TestCase("/dinners/edit", "/dinners/edit/123")]
         public void Browser_GetRequest_AcceptsOptionalInt(string Root, string Path)
         {
-
             //Arrange & Act
             var result = SetupRouteResponse(Root, Path, Route.AnyIntOptional("id"), "OptionalInt");
 
@@ -104,7 +98,6 @@ namespace Nancy.RouteHelpers.Tests
 
             //Assert
             Assert.AreEqual("OptionalString", result.Body.AsString());
-
         }
 
         [TestCase("", "/a", 1, 1)]
@@ -120,7 +113,18 @@ namespace Nancy.RouteHelpers.Tests
 
             //Assert
             Assert.AreEqual("AnyStringWithRange", result.Body.AsString());
+        }
 
+        [TestCase("", "/a")]
+        [TestCase("", "/ab")]
+        [TestCase("", "/abc")]
+        public void Browser_GetReqest_AcceptsAnyString(string Root, string Path)
+        {
+            //Arrange & Act
+            var result = SetupRouteResponse(Root, Path, "/" + Route.AnyStringAtLeastOnce("id"), "AnyString");
+
+            //Assert
+            Assert.AreEqual("AnyString", result.Body.AsString());
         }
 
         [TestCase("", "/abc", "abc")]
@@ -137,7 +141,5 @@ namespace Nancy.RouteHelpers.Tests
             //Assert
             Assert.AreEqual("Exact", result.Body.AsString());
         }
-
-
     }
 }
