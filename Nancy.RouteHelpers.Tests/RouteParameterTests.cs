@@ -320,53 +320,6 @@ namespace Nancy.RouteHelpers.Tests
 
         }
 
-        public class RequestParameterTestClass
-        {
-            public static IEnumerable TestCases
-            {
-                get
-                {
-                    yield return new TestCaseData(new object[] { "", "/product", Route.AnyStringOptional("name").AnyIntOptional("id"), "id", "" });
-                    yield return new TestCaseData(new object[] { "", "/product", Route.AnyStringOptional("name").AnyIntOptional("id"), "name", "product" });
-                    yield return new TestCaseData(new object[] { "", "/123", Route.AnyStringOptional("name").AnyIntOptional("id"), "id", "" });
-                    yield return new TestCaseData(new object[] { "", "/123", Route.AnyStringOptional("name").AnyIntOptional("id"), "name", "123" });
-
-                    yield return new TestCaseData(new object[] { "", "/123/456", Route.Root().AnyIntAtLeastOnce("id").And().AnyIntOptional("anotherid"), "anotherid", "456" });
-                    yield return new TestCaseData(new object[] { "", "/123", Route.Root().AnyIntAtLeastOnce("id").And().AnyIntOptional("anotherid"), "anotherid", "" });
-                    yield return new TestCaseData(new object[] { "", "/123/macbookpro", Route.Root().AnyIntAtLeastOnce("id").And().AnyStringOptional("anotherid"), "anotherid", "macbookpro" });
-                    yield return new TestCaseData(new object[] { "", "/123", Route.Root().AnyIntAtLeastOnce("id").And().AnyStringOptional("anotherid"), "anotherid", "" });
-
-                    yield return new TestCaseData(new object[] { "", "/123/456", Route.Root().AnyIntAtLeastOnce("id", 1, 3).AnyIntOptional("anotherid"), "anotherid", "456" });
-                    yield return new TestCaseData(new object[] { "", "/123", Route.Root().AnyIntAtLeastOnce("id", 1, 3).AnyIntOptional("anotherid"), "anotherid", "" });
-                    yield return new TestCaseData(new object[] { "", "/123/macbookpro", Route.Root().AnyIntAtLeastOnce("id", 1, 3).AnyStringOptional("anotherid"), "anotherid", "macbookpro" });
-                    yield return new TestCaseData(new object[] { "", "/123", Route.Root().AnyIntAtLeastOnce("id", 1, 3).AnyStringOptional("anotherid"), "anotherid", "" });
-
-                    yield return new TestCaseData(new object[] { "", "/123", Route.AnyIntOptional("id").And().AnyIntAtLeastOnce("musthaveid", 1, 3), "musthaveid", "123" });
-                    yield return new TestCaseData(new object[] { "", "/456", Route.AnyIntOptional("id").And().AnyIntAtLeastOnce("musthaveid", 1, 3), "musthaveid", "456" });
-                    yield return new TestCaseData(new object[] { "", "/123/456", Route.AnyIntOptional("id").And().AnyIntAtLeastOnce("musthaveid", 1, 3), "id", "123" });
-                    yield return new TestCaseData(new object[] { "", "/123/macbookpro", Route.AnyIntOptional("id").And().AnyStringAtLeastOnce("musthaveid", 1, 10), "id", "123" });
-                    yield return new TestCaseData(new object[] { "", "/macbookpro", Route.AnyIntOptional("id").And().AnyStringAtLeastOnce("musthaveid", 1, 10), "musthaveid", "macbookpro" });
-                    yield return new TestCaseData(new object[] { "", "/123/macbookpro", Route.AnyIntOptional("id").And().AnyStringAtLeastOnce("musthaveid"), "id", "123" });
-                    yield return new TestCaseData(new object[] { "", "/macbookpro", Route.AnyIntOptional("id").And().AnyStringAtLeastOnce("musthaveid"), "musthaveid", "macbookpro" });
-                    yield return new TestCaseData(new object[] { "", "/123/macbookpro", Route.AnyIntOptional("id").AnyStringOptional("musthaveid"), "id", "123" });
-                    yield return new TestCaseData(new object[] { "", "/macbookpro", Route.AnyIntOptional("id").AnyStringOptional("musthaveid"), "musthaveid", "macbookpro" });
-
-                    yield return new TestCaseData(new object[] { "", "/macbookpro/123", Route.Root().Exact("id", "macbookpro").And().AnyIntOptional("musthaveid"), "musthaveid", "123" });
-                    yield return new TestCaseData(new object[] { "", "/macbookpro", Route.Root().Exact("id", "macbookpro").And().AnyIntOptional("musthaveid"), "musthaveid", "" });
-                    yield return new TestCaseData(new object[] { "", "/macbookpro/antiglare", Route.Root().Exact("id", "macbookpro").And().AnyStringOptional("musthaveid"), "musthaveid", "antiglare" });
-                    yield return new TestCaseData(new object[] { "", "/macbookpro", Route.Root().Exact("id", "macbookpro").And().AnyStringOptional("musthaveid"), "musthaveid", "" });
-                }
-            }
-        }
-
-        [Test, TestCaseSource(typeof(RequestParameterTestClass), "TestCases")]
-        public void Browser_GetRequest_RequestParametersPopulated(string Root, string Path, RouteParameters Route, string Param, string Expected)
-        {
-            var result = SetupRouteResponse(Root, Path, Route, "MatchIt");
-
-            Assert.AreEqual(Expected, (string)result.Context.Parameters[Param]);
-        }
-
         [TestCase("", "/product/123")]
         [TestCase("", "/product")]
         [TestCase("", "/123")]
@@ -693,5 +646,55 @@ namespace Nancy.RouteHelpers.Tests
             Assert.AreEqual("MatchIt", result.Body.AsString());
         }
 
+        /********
+         * Parameter Tests
+        ********/
+
+        public class RequestParameterTestClass
+        {
+            public static IEnumerable TestCases
+            {
+                get
+                {
+                    yield return new TestCaseData(new object[] { "", "/product", Route.AnyStringOptional("name").AnyIntOptional("id"), "id", "" });
+                    yield return new TestCaseData(new object[] { "", "/product", Route.AnyStringOptional("name").AnyIntOptional("id"), "name", "product" });
+                    yield return new TestCaseData(new object[] { "", "/123", Route.AnyStringOptional("name").AnyIntOptional("id"), "id", "" });
+                    yield return new TestCaseData(new object[] { "", "/123", Route.AnyStringOptional("name").AnyIntOptional("id"), "name", "123" });
+
+                    yield return new TestCaseData(new object[] { "", "/123/456", Route.Root().AnyIntAtLeastOnce("id").And().AnyIntOptional("anotherid"), "anotherid", "456" });
+                    yield return new TestCaseData(new object[] { "", "/123", Route.Root().AnyIntAtLeastOnce("id").And().AnyIntOptional("anotherid"), "anotherid", "" });
+                    yield return new TestCaseData(new object[] { "", "/123/macbookpro", Route.Root().AnyIntAtLeastOnce("id").And().AnyStringOptional("anotherid"), "anotherid", "macbookpro" });
+                    yield return new TestCaseData(new object[] { "", "/123", Route.Root().AnyIntAtLeastOnce("id").And().AnyStringOptional("anotherid"), "anotherid", "" });
+
+                    yield return new TestCaseData(new object[] { "", "/123/456", Route.Root().AnyIntAtLeastOnce("id", 1, 3).AnyIntOptional("anotherid"), "anotherid", "456" });
+                    yield return new TestCaseData(new object[] { "", "/123", Route.Root().AnyIntAtLeastOnce("id", 1, 3).AnyIntOptional("anotherid"), "anotherid", "" });
+                    yield return new TestCaseData(new object[] { "", "/123/macbookpro", Route.Root().AnyIntAtLeastOnce("id", 1, 3).AnyStringOptional("anotherid"), "anotherid", "macbookpro" });
+                    yield return new TestCaseData(new object[] { "", "/123", Route.Root().AnyIntAtLeastOnce("id", 1, 3).AnyStringOptional("anotherid"), "anotherid", "" });
+
+                    yield return new TestCaseData(new object[] { "", "/123", Route.AnyIntOptional("id").And().AnyIntAtLeastOnce("musthaveid", 1, 3), "musthaveid", "123" });
+                    yield return new TestCaseData(new object[] { "", "/456", Route.AnyIntOptional("id").And().AnyIntAtLeastOnce("musthaveid", 1, 3), "musthaveid", "456" });
+                    yield return new TestCaseData(new object[] { "", "/123/456", Route.AnyIntOptional("id").And().AnyIntAtLeastOnce("musthaveid", 1, 3), "id", "123" });
+                    yield return new TestCaseData(new object[] { "", "/123/macbookpro", Route.AnyIntOptional("id").And().AnyStringAtLeastOnce("musthaveid", 1, 10), "id", "123" });
+                    yield return new TestCaseData(new object[] { "", "/macbookpro", Route.AnyIntOptional("id").And().AnyStringAtLeastOnce("musthaveid", 1, 10), "musthaveid", "macbookpro" });
+                    yield return new TestCaseData(new object[] { "", "/123/macbookpro", Route.AnyIntOptional("id").And().AnyStringAtLeastOnce("musthaveid"), "id", "123" });
+                    yield return new TestCaseData(new object[] { "", "/macbookpro", Route.AnyIntOptional("id").And().AnyStringAtLeastOnce("musthaveid"), "musthaveid", "macbookpro" });
+                    yield return new TestCaseData(new object[] { "", "/123/macbookpro", Route.AnyIntOptional("id").AnyStringOptional("musthaveid"), "id", "123" });
+                    yield return new TestCaseData(new object[] { "", "/macbookpro", Route.AnyIntOptional("id").AnyStringOptional("musthaveid"), "musthaveid", "macbookpro" });
+
+                    yield return new TestCaseData(new object[] { "", "/macbookpro/123", Route.Root().Exact("id", "macbookpro").And().AnyIntOptional("musthaveid"), "musthaveid", "123" });
+                    yield return new TestCaseData(new object[] { "", "/macbookpro", Route.Root().Exact("id", "macbookpro").And().AnyIntOptional("musthaveid"), "musthaveid", "" });
+                    yield return new TestCaseData(new object[] { "", "/macbookpro/antiglare", Route.Root().Exact("id", "macbookpro").And().AnyStringOptional("musthaveid"), "musthaveid", "antiglare" });
+                    yield return new TestCaseData(new object[] { "", "/macbookpro", Route.Root().Exact("id", "macbookpro").And().AnyStringOptional("musthaveid"), "musthaveid", "" });
+                }
+            }
+        }
+
+        [Test, TestCaseSource(typeof(RequestParameterTestClass), "TestCases")]
+        public void Browser_GetRequest_RequestParametersPopulated(string Root, string Path, RouteParameters Route, string Param, string Expected)
+        {
+            var result = SetupRouteResponse(Root, Path, Route, "MatchIt");
+
+            Assert.AreEqual(Expected, (string)result.Context.Parameters[Param]);
+        }
     }
 }
