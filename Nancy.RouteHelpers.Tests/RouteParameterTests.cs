@@ -691,7 +691,6 @@ namespace Nancy.RouteHelpers.Tests
 
             //Assert
             Assert.AreEqual("MatchIt", result.Body.AsString());
-
         }
 
     }
