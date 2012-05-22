@@ -44,7 +44,7 @@
         }
 
         /// <summary>
-        /// Starts ruote segments by adding a '/' to the route
+        /// Starts route segments by adding a '/' to the route
         /// </summary>
         /// <returns></returns>
         public static RouteParameters Root()
