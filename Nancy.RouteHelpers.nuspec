@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <version>1.0.8</version>
+    <authors>Jonathan Channon,Johan Nilsson</authors>
+    <owners>Jonathan Channon,Johan Nilsson</owners>
+    <licenseUrl>https://github.com/jchannon/Nancy.RouteHelpers/blob/master/licence.txt</licenseUrl>
+    <projectUrl>https://github.com/jchannon/Nancy.RouteHelpers</projectUrl>
+    <iconUrl>http://nancyfx.org/nancy-nuget.png</iconUrl>
+    <id>Nancy.RouteHelpers</id>
+    <title>Nancy.RouteHelpers</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>This library allows you to write pretty NancyFX routes without nasty looking regex strings in your routes.</description>
+    <summary>This library allows you to write pretty NancyFX routes without nasty looking regex strings in your routes.</summary>
+    <releaseNotes>Initial Release</releaseNotes>
+    <language>en-GB</language>
+    <tags>Nancy</tags>
+  </metadata>
+  <files>
+    <file src="lib\Nancy.RouteHelpers.dll" target="lib\Nancy.RouteHelpers.dll" />
+    <file src="lib\Nancy.RouteHelpers.XML" target="lib\Nancy.RouteHelpers.XML" />
+    <file src="README.txt" target="README.txt" />
+  </files>
+</package>
